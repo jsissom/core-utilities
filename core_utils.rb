@@ -15,41 +15,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'net/http'
 require 'json'
-require_relative './core_utils.rb'
 
-if ARGV.length != 1
-  puts "list_users.rb domain\n"
-  puts "  domain = core domain"
-  exit 1
+def get_token(domain)
+  domain_file = ".#{domain}.token"
+  raise "unknown domain: #{domain}" unless File.exist?(domain_file)
+  File.read(domain_file)
 end
 
-begin
-  domain = ARGV[0]
-  token = get_token(domain)
-
-  uri = URI("https://#{domain}.kuali.co/api/v1/users")
-
-  request = Net::HTTP::Get.new(uri)
-  request["Authorization"] = "Bearer #{token}"
-
-  response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == "https") do |http|
-    http.request(request)
-  end
-
-  if response.is_a?(Net::HTTPSuccess)
-    jsonStr = response.body
-    json = JSON.parse(jsonStr)
-    puts JSON.pretty_generate(json)
-    exit 0
-  end
-
-  puts response.code
-  puts response.message
-  exit 1
-rescue => error
-  puts error
-  exit 1
+def read_json_file(filename)
+  raise "unknown file: #{filename}" unless File.exist?(filename)
+  File.read(filename)
 end
 

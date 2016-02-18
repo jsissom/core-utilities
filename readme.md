@@ -8,11 +8,26 @@ Commands
 
 All commands require the core domain to be the first command line argument.
 
-* **add_user.rb** - Add a user.  The information about the new user must be put into this script for now.
+* **add_user.rb** - Add a user.  The information about the new user must be put into a file.  The filename is passed to this program
 * **delete_user.rb** - Delete a user.  Pass the user ID as the second command line argument.
 * **get_current_user.rb** - Get information about your current user (the user that owns your API token).
 * **get_user.rb** - Get information about a user.  Pass the user ID as the second command line argument.
 * **list_users.rb** - List all users.
+
+Sample Format for new user file
+===============================
+
+```javascript
+{
+  "name" : "Sample User",
+  "password" : "password",
+  "username" : "sample",
+  "email" : "sample@email.edu",
+  "role" : "user",
+  "firstName" : "Sample",
+  "lastName" : "User"
+}
+```
 
 License
 =======

@@ -17,32 +17,45 @@
 
 require 'net/http'
 require 'json'
+require_relative './core_utils.rb'
+
+if ARGV.length != 2
+  puts "delete_user.rb domain user_id\n"
+  puts "  domain = core domain"
+  puts "  user_id = id of user to be deleted"
+  exit 1
+end
 
 if ARGV.length != 2
   puts "Must pass domain then user id as parameter"
   exit 1
 end
 
-domain = ARGV[0]
-token = File.read(".#{domain}.token")
+begin
+  domain = ARGV[0]
+  token = get_token(domain)
 
-id = ARGV[1]
+  id = ARGV[1]
 
-uri = URI("https://#{domain}.kuali.co/api/v1/users/#{id}")
+  uri = URI("https://#{domain}.kuali.co/api/v1/users/#{id}")
 
-request = Net::HTTP::Delete.new(uri)
-request['Authorization'] = "Bearer #{token}"
+  request = Net::HTTP::Delete.new(uri)
+  request['Authorization'] = "Bearer #{token}"
 
-response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == "https") do |http|
-  http.request(request)
+  response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == "https") do |http|
+    http.request(request)
+  end
+
+  if response.is_a?(Net::HTTPSuccess)
+    puts "Deleted"
+    exit 0
+  end
+
+  puts response.code
+  puts response.message
+  exit 1
+rescue => error
+  puts error
+  exit 1
 end
-
-if response.is_a?(Net::HTTPSuccess)
-  puts "Deleted"
-  exit 0
-end
-
-puts response.code
-puts response.message
-exit 1
 
