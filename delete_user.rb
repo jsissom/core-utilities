@@ -26,11 +26,6 @@ if ARGV.length != 2
   exit 1
 end
 
-if ARGV.length != 2
-  puts "Must pass domain then user id as parameter"
-  exit 1
-end
-
 begin
   domain = ARGV[0]
   token = get_token(domain)
