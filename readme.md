@@ -13,6 +13,7 @@ All commands require the core domain to be the first command line argument.
 * **get_current_user.rb** - Get information about your current user (the user that owns your API token).
 * **get_user.rb** - Get information about a user.  Pass the user ID as the second command line argument.
 * **list_users.rb** - List all users.
+* **update_user.rb** - Update a user's information.
 
 Sample Format for new user file
 ===============================
